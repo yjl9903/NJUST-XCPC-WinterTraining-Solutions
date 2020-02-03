@@ -1,4 +1,5 @@
 ---
+mathjax: true
 title: CCF CSP 选拔模拟赛 Round 1
 date: 2020-01-22 19:19:25
 categories:
