@@ -287,231 +287,231 @@ int pai[3][20];
 char s[20],t[20],t1[20];
 int change(char a)
 {
-  if (a=='T') return 10;
-  if (a=='J') return 11;
-  if (a=='Q') return 12;
-  if (a=='K') return 13;
-  if (a=='A') return 14;
-  if (a=='2') return 15;
-  if (a=='X') return 16;//小王
-  if (a=='Y') return 17;//大王
-  return a-'3'+3;
+    if (a=='T') return 10;
+    if (a=='J') return 11;
+    if (a=='Q') return 12;
+    if (a=='K') return 13;
+    if (a=='A') return 14;
+    if (a=='2') return 15;
+    if (a=='X') return 16;//小王
+    if (a=='Y') return 17;//大王
+    return a-'3'+3;
 }
 //玩家的结构体，其中包括所有手牌的每种类型的最大值
 struct Player{
-  int dan,dui,t3,t3_1,t3_2,t4,t4_2,t4_4;
-  int shun[8];//5~12
-  Player(){
-    dan=dui=t3=t3_1=t3_2=t4=t4_2=t4_4=0;
-    memset(shun,0,sizeof(shun));
-  }
-  void clear()
-  {
-    dan=dui=t3=t3_1=t3_2=t4=t4_2=t4_4=0;
-    memset(shun,0,sizeof(shun));
-  }
+    int dan,dui,t3,t3_1,t3_2,t4,t4_2,t4_4;
+    int shun[8];//5~12
+    Player(){
+        dan=dui=t3=t3_1=t3_2=t4=t4_2=t4_4=0;
+        memset(shun,0,sizeof(shun));
+    }
+    void clear()
+    {
+        dan=dui=t3=t3_1=t3_2=t4=t4_2=t4_4=0;
+        memset(shun,0,sizeof(shun));
+    }
 }play[3];
 //对第id个玩家的手牌进行处理
 void solve(int id)
 {
-  Player &p = play[id];
-  //单牌
-  for (int i=17;i>=3;i--)
-  {
-    if (pai[id][i])
+    Player &p = play[id];
+    //单牌
+    for (int i=17;i>=3;i--)
     {
-      p.dan=i;
-      break;
+        if (pai[id][i])
+        {
+            p.dan=i;
+            break;
+        }
     }
-  }
-  //对子
-  for (int i=15;i>=3;i--)
-  {
-    if (pai[id][i]>=2)
+    //对子
+    for (int i=15;i>=3;i--)
     {
-      p.dui=i;
-      break;
+        if (pai[id][i]>=2)
+        {
+            p.dui=i;
+            break;
+        }
     }
-  }
-  //3个
-  for (int i=15;i>=3;i--)
-  {
-    if(pai[id][i]==3)
+    //3个
+    for (int i=15;i>=3;i--)
     {
-      p.t3=i;
-      break;
+        if(pai[id][i]==3)
+        {
+            p.t3=i;
+            break;
+        }
     }
-  }
-  //3带1
-  for (int i=3;i<=17 && p.t3>0;i++)
-  {
-    if (i==p.t3)
-    continue;
-    if (pai[id][i])
+    //3带1
+    for (int i=3;i<=17 && p.t3>0;i++)
     {
-      p.t3_1=p.t3;
-      break;
+        if (i==p.t3)
+        continue;
+        if (pai[id][i])
+        {
+            p.t3_1=p.t3;
+            break;
+        }
     }
-  }
-  //3带1对
-  for (int i=3;i<=15 && p.t3>0;i++)
-  {
-    if (i==p.t3)
-    continue;
-    if (pai[id][i]>=2)
+    //3带1对
+    for (int i=3;i<=15 && p.t3>0;i++)
     {
-      p.t3_2=p.t3;
-      break;
+        if (i==p.t3)
+        continue;
+        if (pai[id][i]>=2)
+        {
+            p.t3_2=p.t3;
+            break;
+        }
     }
-  }
-  //4个
-  for (int i=15;i>=3;i--)
-  {
-    if (pai[id][i]==4)
+    //4个
+    for (int i=15;i>=3;i--)
     {
-      p.t4=i;
-      break;
+        if (pai[id][i]==4)
+        {
+            p.t4=i;
+            break;
+        }
     }
-  }
-  //4带2
-  int c=0;
-  for (int i=3;i<=17 && p.t4;i++)
-  {
-    if (i==p.t4)
-    continue;
-    c+=pai[id][i];
-    if (c>=2)
+    //4带2
+    int c=0;
+    for (int i=3;i<=17 && p.t4;i++)
     {
-      p.t4_2=p.t4;
-      break;
+        if (i==p.t4)
+        continue;
+        c+=pai[id][i];
+        if (c>=2)
+        {
+            p.t4_2=p.t4;
+            break;
+        }
     }
-  }
-  //4带2对
-  c=0;
-  for (int i=3;i<=15 && p.t4 ;i++)
-  {
-    if (i==p.t4)
-    continue;
-    c+=pai[id][i]/2;
-    if (c>=2)
+    //4带2对
+    c=0;
+    for (int i=3;i<=15 && p.t4 ;i++)
     {
-      p.t4_4=p.t4;
+        if (i==p.t4)
+        continue;
+        c+=pai[id][i]/2;
+        if (c>=2)
+        {
+            p.t4_4=p.t4;
+        }
     }
-  }
-  //顺子
-  for (int i=14;i>=7;i--)
-  {
-    int len_s=0;
-    for (int j=i;j>=3;j--)
+    //顺子
+    for (int i=14;i>=7;i--)
     {
-      if(pai[id][j])
-      {
-        len_s++;
-        if (len_s>=5)
-        p.shun[len_s-5]=max(p.shun[len_s-5],i);
-      }
-      else
-      break;
+        int len_s=0;
+        for (int j=i;j>=3;j--)
+        {
+            if(pai[id][j])
+            {
+                len_s++;
+                if (len_s>=5)
+                p.shun[len_s-5]=max(p.shun[len_s-5],i);
+            }
+            else
+            break;
+        }
     }
-  }
 }
 //判断是否可以一次出完
 bool once(int cur)
 {
-  Player &p = play[cur];
-  int len=strlen(s);
-  if (len>=5 && len<=12 && p.shun[len-5])
-  return true;
-  if (len==8 && p.t4_4)
+    Player &p = play[cur];
+    int len=strlen(s);
+    if (len>=5 && len<=12 && p.shun[len-5])
     return true;
-  if (len==6 && p.t4_2)
-    return true;
-  if (len==5 && p.t3_2)
-    return true;
-  if (len==4 && (p.t3_1 || p.t4))
-    return true;
-  if (len==3 && p.t3)
-    return true;
-  if (len==2 && p.dui)
-    return true;
-  if (len==1)
-    return true;
-  return false;
+    if (len==8 && p.t4_4)
+        return true;
+    if (len==6 && p.t4_2)
+        return true;
+    if (len==5 && p.t3_2)
+        return true;
+    if (len==4 && (p.t3_1 || p.t4))
+        return true;
+    if (len==3 && p.t3)
+        return true;
+    if (len==2 && p.dui)
+        return true;
+    if (len==1)
+        return true;
+    return false;
 }
 int main()
 {
-  //freopen("3.in","r",stdin);
-  //freopen("3.out","w",stdout);
-  int cas;
-  cin>>cas;
-  for (int ca=1;ca<=cas;ca++)
-  {
-    play[0].clear();
-    play[1].clear();
-    play[2].clear();
-    memset(pai,0,sizeof(pai));
-    scanf("%s%s%s",s,t,t1);
-    int lens=strlen(s),lent=strlen(t),lent1=strlen(t1);
-    for (int i=0;i<lens;i++)
-    pai[0][change(s[i])]++;
-    for (int i=0;i<lent;i++)
-    pai[1][change(t[i])]++;
-    for (int i=0;i<lent1;i++)
-    pai[2][change(t1[i])]++;
-    solve(0);
-    solve(1);
-    solve(2);
-    if (once(0))
+    //freopen("3.in","r",stdin);
+    //freopen("3.out","w",stdout);
+    int cas;
+    cin>>cas;
+    for (int ca=1;ca<=cas;ca++)
     {
-      printf("Winner\n");
-      continue;
-    }
-    else
-    {
-      //王炸
-      if (pai[0][16] && pai[0][17])
-      {
-        printf("Yes\n");
-        continue;
-      }
-      if ((pai[1][16] && pai[1][17]) || (pai[2][16] && pai[2][17]))
-      {
-        printf("No\n");
-        continue;
-      }
-      //第2或3名玩家有炸弹
-      if (play[1].t4 || play[2].t4)
-      {
-        if (play[0].t4>play[1].t4 && play[0].t4>play[2].t4)
-          printf("Yes\n");
-        else
-          printf("No\n");
-        continue;
-      }
-      Player &p1=play[0];
-      Player &p2=play[1];
-      Player &p3=play[2];
-      bool yes=false;
-      if (p1.t4 || (p1.t3>p2.t3 && p1.t3>p3.t3) || (p1.t3_1>p2.t3_1 && p1.t3_1>p3.t3_1) || (p1.t3_2>p2.t3_2 && p1.t3_2>p3.t3_2))
-      yes=true;
-      if ((p1.dui && p1.dui>=p2.dui && p1.dui>=p3.dui) || (p1.dan && p1.dan>=p2.dan && p1.dan>=p3.dan))
-      yes=true;
-      for (int i=0;i<8;i++)
-      {
-        if (p1.shun[i] && p1.shun[i]>=p2.shun[i] && p1.shun[i]>=p2.shun[i])
+        play[0].clear();
+        play[1].clear();
+        play[2].clear();
+        memset(pai,0,sizeof(pai));
+        scanf("%s%s%s",s,t,t1);
+        int lens=strlen(s),lent=strlen(t),lent1=strlen(t1);
+        for (int i=0;i<lens;i++)
+        pai[0][change(s[i])]++;
+        for (int i=0;i<lent;i++)
+        pai[1][change(t[i])]++;
+        for (int i=0;i<lent1;i++)
+        pai[2][change(t1[i])]++;
+        solve(0);
+        solve(1);
+        solve(2);
+        if (once(0))
         {
-          yes=true;
-          break;
+            printf("Winner\n");
+            continue;
         }
-      }
-      if (yes)
-      printf("Yes");
-      else
-      printf("No");
-      if (ca!=cas)
-      printf("\n");
+        else
+        {
+            //王炸
+            if (pai[0][16] && pai[0][17])
+            {
+                printf("Yes\n");
+                continue;
+            }
+            if ((pai[1][16] && pai[1][17]) || (pai[2][16] && pai[2][17]))
+            {
+                printf("No\n");
+                continue;
+            }
+            //第2或3名玩家有炸弹
+            if (play[1].t4 || play[2].t4)
+            {
+                if (play[0].t4>play[1].t4 && play[0].t4>play[2].t4)
+                    printf("Yes\n");
+                else
+                    printf("No\n");
+                continue;
+            }
+            Player &p1=play[0];
+            Player &p2=play[1];
+            Player &p3=play[2];
+            bool yes=false;
+            if (p1.t4 || (p1.t3>p2.t3 && p1.t3>p3.t3) || (p1.t3_1>p2.t3_1 && p1.t3_1>p3.t3_1) || (p1.t3_2>p2.t3_2 && p1.t3_2>p3.t3_2))
+            yes=true;
+            if ((p1.dui && p1.dui>=p2.dui && p1.dui>=p3.dui) || (p1.dan && p1.dan>=p2.dan && p1.dan>=p3.dan))
+            yes=true;
+            for (int i=0;i<8;i++)
+            {
+                if (p1.shun[i] && p1.shun[i]>=p2.shun[i] && p1.shun[i]>=p3.shun[i])
+                {
+                    yes=true;
+                    break;
+                }
+            }
+            if (yes)
+            printf("Yes");
+            else
+            printf("No");
+            if (ca!=cas)
+            printf("\n");
+        }
     }
-  }
 }
 ```
 
